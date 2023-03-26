@@ -16,7 +16,7 @@ Each review has the following structure:
 Enjoy(;
 
 ## Level Zero - Hello Ethernaut:
-This level aims to familiarise yourself with how to interact with and play the ethernaut game through the developer console. You should go through this level yourself. 
+This level aims to familiarize yourself with interacting with and playing the ethernaut game through the developer console. It would be best if you went through this level yourself. 
 Hint: type `await contract.info()` and `await contract.password()` in your console.
 
 ## Level One - Fallback:
@@ -31,7 +31,7 @@ An attacker can contribute to the contract by calling the "contribute" function 
 ```javascript
 await contract.contribute({ from: player, value: toWei('0.0005')}
 ```
-However, this restriction can be avoided, if the attacker who has previously contributed sends ether again, but this time without using the contract's "contribute" function and instead sends ether directly.
+However, this restriction can be avoided if the attacker who has previously contributed sends ether again, but this time without using the contract's "contribute" function and instead sends ether directly.
 
 ```javascript
 // in your console, send ether to the contract
@@ -60,10 +60,10 @@ await contract.Fal1out()
 ```
 
 #### My Recommendation(s)
-Up until solidity version `0.4`, a constructor can be defined by the same name as its contract name. However, this is no longer supported in recent versions and all constructors should be named with the `constructor` keyword. When using recent versions of solidity, ensure to use the `constructor` keyword.
+Up until solidity version `0.4`, a constructor can be defined by the same name as its contract name. However, this is no longer supported in recent versions, and all constructors should be named with the `constructor` keyword. When using recent versions of solidity, ensure to use the `constructor` keyword.
 
 ## Level Three - Coin Flip:
-You have to make a correct boolean guess 10 times to hack this level.
+You must make a correct boolean guess ten times to hack this level.
 
 #### The Vulnerability
 The contract uses `block.number` and `blockhash` as a source of randomness, which is not secure since they are deterministic.
@@ -87,7 +87,7 @@ contract CoinFlipAttacker {
   }
 
 
- // call this function 10 times, in different blocks
+ // call this function ten times, in different blocks
   function attack() external {
   // simulate the same thing the "CoinFlip" contract does and call the contract with your value.
   // since both logic are the same, the values will be the same
@@ -116,7 +116,7 @@ The goal is to become the contract owner.
 There is a misuse of `tx.origin` and `msg.sender` in the "Telephone" contract.
 
 #### How it can be exploited
-Call the "Telephone" contract with a smart contract, while passing your address as an arguement.
+Call the "Telephone" contract with a smart contract while passing your address as an argument.
 Like this:
 
 ```solidity
@@ -145,26 +145,26 @@ When using `tx.origin`, ensure you know what you are doing. If an access control
 The goal of this level is for you to hack the basic token contract and increase your balance to a large number.
 
 #### The Vulnerability
-The contract uses solidity version `0.6.0` which is prone to an underflow/overflow error.
+The contract uses solidity version `0.6.0`, prone to an underflow/overflow error.
 
 #### How it can be exploited
-After creating an instance, the player address have a balance of “20” tokens.
+After creating an instance, the player's address has a balance of “20” tokens.
 
-Since the contract checks if a users balance is greater than zero before making a transfer.  We can simply transfer "21" token to any address other than the player address. This will cause an underflow, because `20 - 21 = 2^256-1` (underflow error in older solidity versions).
+Since the contract checks, if a user's balance exceeds zero before making a transfer, we can transfer the "21" token to any address other than the player's. This will cause an underflow because `20 - 21 = 2^256-1` (underflow error in older solidity versions).
 
-paste this in your browser console: 
+Paste this in your browser console: 
 
 ```javascript
 await contract.transfer("0x4924fb92285cb10bc440e6fb4a53c2b94f2930c5",21) // you can substitute the address with your desired address
 ```
 #### My Recommendation(s)
-When using older solidity versions, use the OpenZeppelin SafeMath library for simple arithmetics, it has a check against integer overflow and underflow. 
+When using older solidity versions, use the OpenZeppelin SafeMath library for simple arithmetics; it has a check against integer overflow and underflow. 
 
 ## Level Six - Delegation:
 The goal of this level is to become the contract owner.
 
 #### The Vulnerability
-The "Delegation" contract makes a delegate call to the "Delegate" contract, this call executes whatever function is being called but in the context of the "Delegation" contract (see [delegate call](https://docs.soliditylang.org/en/v0.8.6/introduction-to-smart-contracts.html?highlight=delegatecall#delegatecall-callcode-and-libraries)).
+The "Delegation" contract makes a delegate call to the "Delegate" contract; this call executes whatever function is being called but in the context of the "Delegation" contract (see [delegate call](https://docs.soliditylang.org/en/v0.8.6/introduction-to-smart-contracts.html?highlight=delegatecall#delegatecall-callcode-and-libraries)).
 
 #### How it can be exploited
 1. Encode the "pwn()" function in your console:
@@ -173,20 +173,20 @@ The "Delegation" contract makes a delegate call to the "Delegate" contract, this
 encodedFunction = web3.eth.abi.encodeFunctionSignature("pwn()")
 ```
 
-2. Call the encoded function on the "Delegation" contract. This triggers the fallback function which makes the delegate call.
+2. Call the encoded function on the "Delegation" contract. This triggers the fallback function, which makes the delegate call.
 
 ```javascript
 await contract.sendTransaction({from: player, data: encodedFunction})
 ```
 
 #### My Recommendation(s)
-Remove the "delegate call", use the "call" function instead when trying to make and ordinary external contract call.
+Remove the "delegate call" and use the "call" function when making an ordinary external contract call.
 
 ## Level Seven - Force:
-To pass this level, we must force the contract balance to be greater than zero.
+We must force the contract balance to be greater than zero to pass this level.
 
 #### The Vulnerability
-The "Force" contract is an empty contract, so it cannot accept Ether or even execute any transaction. However, with the `selfdestruct()` function, we can force send Ether to any address, including an empty contract.
+The "Force" contract is empty, so it cannot accept Ether or execute any transaction. However, with the `selfdestruct()` function, we can force send Ether to any address, including an empty contract.
 
 #### How it can be exploited
 
@@ -223,7 +223,7 @@ contract AttackForceContract{
     receive() external payable {}
 }
 ```
-- Deploy the "AttackForceContract" contract and send Ether to it, through the payable constructor.
+- Deploy the "AttackForceContract" contract and send Ether to it through the payable constructor.
 - Call the "attack" function.
 - Verify that the "Force" contract now has a balance greater than zero:
 
@@ -231,13 +231,13 @@ contract AttackForceContract{
 await getBalance(instance)// returns the balance of the contract's instance
 ```
 #### My Recommendation(s)
-Currently, there is no way to block Ether sent through a `selfdestruct` in Ethereum.
+There is no way to block Ether sent through a `selfdestruct` in Ethereum.
 
 ## Level Eight - Vault:
-The goal of this level is to set the "locked" value to false.
+This level aims to set the "locked" value to false.
 
 #### The Vulnerability
-The contract stores the password to unlock it as a private `bytes32` variable. However, even private variables can be read since the blockchain is public ledger.
+The contract stores the password to unlock it as a private `bytes32` variable. However, even private variables can be read since the blockchain is a public ledger.
 
 #### How it can be exploited
 Run the following commands:
