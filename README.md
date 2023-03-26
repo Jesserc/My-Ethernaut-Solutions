@@ -260,8 +260,7 @@ await contract.locked() // returns false
 Never store imortant informations on-chain.
 
 
-## Level 9
-
+## Level Nine - King
 
 ```solidity
 // SPDX-License-Identifier: MIT
